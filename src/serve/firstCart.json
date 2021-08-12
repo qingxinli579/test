@@ -1,0 +1,36 @@
+{
+    "cart":[
+        {
+            "brand_name": "奥迪",
+            "brand_logo": "https://juhe.oss-cn-hangzhou.aliyuncs.com/api_image/538/brand/1.png"
+        },
+        {
+            "brand_name": "大众",
+            "brand_logo": "https://juhe.oss-cn-hangzhou.aliyuncs.com/api_image/538/brand/63.png"
+        },
+        {
+            "brand_name": "丰田",
+            "brand_logo": "https://juhe.oss-cn-hangzhou.aliyuncs.com/api_image/538/brand/83.png"
+        },
+        {
+            "brand_name": "宝马",
+             "brand_logo": "https://juhe.oss-cn-hangzhou.aliyuncs.com/api_image/538/brand/21.png"
+        },
+        {
+            "brand_name": "本田",
+             "brand_logo": "https://juhe.oss-cn-hangzhou.aliyuncs.com/api_image/538/brand/20.png"
+        },
+        {
+            "brand_name": "奔驰",
+            "brand_logo": "https://juhe.oss-cn-hangzhou.aliyuncs.com/api_image/538/brand/23.png"
+        },
+        {
+            "brand_name": "比亚迪",
+            "brand_logo": "https://juhe.oss-cn-hangzhou.aliyuncs.com/api_image/538/brand/28.png"
+        },
+        {
+            "brand_name": "保时捷",
+            "brand_logo": "https://juhe.oss-cn-hangzhou.aliyuncs.com/api_image/538/brand/27.png"
+        }
+    ]
+}
