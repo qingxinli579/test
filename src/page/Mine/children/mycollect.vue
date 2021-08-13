@@ -69,11 +69,12 @@
               </div>
               <div class="shipping">
                 <div class="shipping-box">
-                  <div class="shipping-total shipping-num"><h4
-                                                             class="highlight"
-                                                           >已选择
-                                                             <i v-text="multipleSelection.length" />
-                                                             件商品</h4>
+                  <div class="shipping-total shipping-num">
+                    <h4
+                      class="highlight"
+                    >已选择
+                      <i v-text="multipleSelection.length" />
+                      件商品</h4>
                     <h5>共计 <i v-text="totalNum" /> 件商品</h5></div>
                 </div>
               </div>
@@ -96,7 +97,6 @@
 <script>
 import { delcollect, delcollects } from '../../../api/index'
 import { mapMutations, mapState } from 'vuex'
-import { getStore } from '../../../utils/storage'
 export default {
   data() {
     return {
@@ -176,10 +176,6 @@ export default {
         })
       })
     }
-  },
-  mounted() {
-    this.userName = getStore('userName')
-    this.INIT_BUYCART()
   }
 }
 </script>

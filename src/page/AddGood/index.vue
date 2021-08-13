@@ -55,7 +55,7 @@
               :auto-upload="false"
             >
               <i slot="default" class="el-icon-plus" />
-              <div slot="file" slot-scope="{ file }">
+              <div slot="file">
                 <img
                   class="el-upload-list__item-thumbnail"
                   :src="file.url"

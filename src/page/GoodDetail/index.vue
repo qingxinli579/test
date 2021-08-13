@@ -178,7 +178,6 @@
 import { addcollect } from '../../api/index'
 import { mapMutations } from 'vuex'
 import { getgoodByid } from '../../api/index'
-import { getStore } from '../../utils/storage'
 export default {
   data() {
     return {
@@ -232,11 +231,6 @@ export default {
         }
       })
     }
-  },
-  created() {
-    const id = this.$route.query.goods_id
-    this._productDet(id)
-    this.userName = getStore('userName')
   }
 }
 </script>

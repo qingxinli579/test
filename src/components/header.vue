@@ -271,18 +271,6 @@ export default {
     openProduct(goods_id) {
       window.open('//' + window.location.host + '/#/goodDetail?goods_id=' + goods_id)
     }
-  },
-  mounted() {
-    this.islogin = !!getStore('token')
-    if (this.islogin) {
-      this._getCartList()
-    } else {
-      this.INIT_BUYCART()
-    }
-    var photo = getStore('headphoto')
-    this.picture = photo == 'null' ? '' : photo
-    this.getPage()
-    this.restaurants = this.loadAll()
   }
 }
 </script>

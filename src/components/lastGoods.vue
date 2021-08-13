@@ -38,7 +38,6 @@
 <script>
 import { addcollect } from '../api/index'
 import { mapState, mapMutations } from 'vuex'
-import { getStore } from '../utils/storage'
 export default {
   props: ['goods'],
   data() {
@@ -70,9 +69,6 @@ export default {
         })
       })
     }
-  },
-  created() {
-    this.userName = getStore('userName')
   }
 }
 </script>
