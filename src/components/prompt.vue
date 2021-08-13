@@ -1,46 +1,46 @@
 <template>
-<div class="item">
+  <div class="item">
     <el-dialog
-        :show-close=false
-        title="关于交易的重要提示"
-        :visible.sync="dialogVisible"
-        width="40%"
-        :before-close="handleClose">
-            <div v-for="(item,i) in warningdata" :key=i>
-                <p class="text">
-                {{i+1}}、{{item.content}}
-            </p>
-            </div>
-        <i class="icon el-icon-close" @click="change"></i>
+      :show-close="false"
+      title="关于交易的重要提示"
+      :visible.sync="dialogVisible"
+      width="40%"
+      :before-close="handleClose"
+    >
+      <div v-for="(item,i) in warningdata" :key="i">
+        <p class="text">
+          {{ i+1 }}、{{ item.content }}
+        </p>
+      </div>
+      <i class="icon el-icon-close" @click="change" />
     </el-dialog>
-    
-</div>
-    
+
+  </div>
+
 </template>
 <script>
-import {getwarning} from '../api/index';
+import { getwarning } from '../api/index'
 export default {
-  data(){
-    return{
-        warningdata:''
+  props: ['dialogVisible'],
+  data() {
+    return {
+      warningdata: ''
     }
   },
-  props: ["dialogVisible"],
+  created() {
+    getwarning().then(res => {
+      if (res.code == 200) {
+        this.warningdata = res.data
+      }
+    })
+  },
 
   methods: {
-    change(){
-        this.$emit('changef')
+    change() {
+      this.$emit('changef')
     }
-  },
-  created(){
-      getwarning().then(res=>{
-        if(res.code==200){
-          this.warningdata=res.data
-        }
-        
-      })
   }
-};
+}
 </script>
 
 <style lang="scss" scoped>

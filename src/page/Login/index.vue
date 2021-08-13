@@ -1,50 +1,55 @@
 <template>
   <div class="login v2">
     <div style=" width:100%;height:240px;position:relative">
-      <div style="width:100%;height:100vh;background:rgba(0,0,0,0.2);position:absolute;z-index:9999">
-      </div>
+      <div style="width:100%;height:100vh;background:rgba(0,0,0,0.2);position:absolute;z-index:9999" />
       <video style="width:100%;height:100vh;object-fit: fill;position:absolute;top:0" autoplay loop>
         <source src="../../../static/images/loginBack.mp4" type="video/mp4">
-      </video> 
+      </video>
     </div>
     <div class="wrapper">
       <div class="dialog dialog-shadow" style="display: block;">
         <div class="content">
           <el-tabs v-model="activeName">
             <el-tab-pane label="密码登录" name="first">
-              <ul class="common-form">       
+              <ul class="common-form">
                 <li class="username border-1p">
                   <div class="input">
-                    <el-input type="text" v-model="ruleForm.userName" placeholder="邮箱" prefix-icon="el-icon-user"></el-input>
+                    <el-input v-model="ruleForm.userName" type="text" placeholder="邮箱" prefix-icon="el-icon-user" />
                   </div>
                 </li>
                 <li>
                   <div class="input">
-                    <el-input 
-                      type='password'
-                      v-model="ruleForm.password" placeholder="密码"  prefix-icon="el-icon-lock"></el-input>
+                    <el-input
+                      v-model="ruleForm.password"
+                      type="password"
+                      placeholder="密码"
+                      prefix-icon="el-icon-lock"
+                    />
                   </div>
                 </li>
                 <li>
                   <div class="input">
                     <section class="login-message">
-                      <el-input type="text" maxlength="4" 
-                        placeholder="验证码" v-model="ruleForm.captcha" 
+                      <el-input
+                        v-model="ruleForm.captcha"
+                        type="text"
+                        maxlength="4"
+                        placeholder="验证码"
                         prefix-icon="el-icon-circle-check"
                         @keyup.enter="login"
-                      ></el-input>
+                      />
                       <img
+                        ref="captcha"
                         class="get-verification"
                         src="http://192.168.43.16:3000/captcha"
                         alt="captcha"
                         @click.prevent="getCaptcha()"
-                        ref="captcha"
                       >
                     </section>
                   </div>
                 </li>
                 <li style="text-align: right" class="pr">
-                  <el-checkbox class="auto-login" v-model="autoLogin">记住密码</el-checkbox>
+                  <el-checkbox v-model="autoLogin" class="auto-login">记住密码</el-checkbox>
                   <a href="javascript:;" class="register" @click="toRegister">注册账号 </a>
                   <span>|</span>
                   <a style="padding: 1px 0 0 10px" @click="open('找回密码','请联系17860516155@163.com')">忘记密码 ?</a>
@@ -55,16 +60,16 @@
               <ul class="common-form">
                 <li class="username border-1p">
                   <div class="input">
-                    <el-input type="text" v-model="ruleForm2.userName" placeholder="邮箱"  prefix-icon="el-icon-user"></el-input>
+                    <el-input v-model="ruleForm2.userName" type="text" placeholder="邮箱" prefix-icon="el-icon-user" />
                   </div>
                 </li>
                 <li>
                   <div class="input">
                     <section class="login-message">
-                      <el-input  v-model="ruleForm2.captcha" @keyup.enter="login" placeholder="验证码" prefix-icon="el-icon-circle-check"></el-input>
-                      <el-button type="text"  class="get-verification" @click="sendCapture" :disabled= disable>{{text}}</el-button>
+                      <el-input v-model="ruleForm2.captcha" placeholder="验证码" prefix-icon="el-icon-circle-check" @keyup.enter="login" />
+                      <el-button type="text" class="get-verification" :disabled="disable" @click="sendCapture">{{ text }}</el-button>
                     </section>
-                  </div> 
+                  </div>
                 </li>
                 <li style="text-align: right" class="pr">
                   <a href="javascript:;" class="register" @click="toRegister">注册账号</a>
@@ -74,23 +79,25 @@
           </el-tabs>
           <!--登陆-->
           <div style="margin-top: 25px">
-            <el-button 
+            <el-button
               type="warning"
+              style="margin: 0;width: 100%;height: 48px;font-size: 18px;line-height: 48px"
               @click="login"
-              style="margin: 0;width: 100%;height: 48px;font-size: 18px;line-height: 48px">登录</el-button>
+            >登录</el-button>
           </div>
           <!--返回-->
           <div>
-            <el-button  
+            <el-button
+              style="marginTop: 10px;marginBottom: 15px;width: 100%;height: 48px;font-size: 18px;line-height: 48px"
               @click="login_back"
-              style="marginTop: 10px;marginBottom: 15px;width: 100%;height: 48px;font-size: 18px;line-height: 48px">
+            >
               返回
             </el-button>
           </div>
-          <div class="border"></div>
+          <div class="border" />
           <div class="footer">
             <div class="other">其它账号登录：</div>
-            <a><img @click="open('待开发','此功能开发中...')" style="height: 15px; margin-top: 22px;" src="../../../static/images/other-login.png"></a>
+            <a><img style="height: 15px; margin-top: 22px;" src="../../../static/images/other-login.png" @click="open('待开发','此功能开发中...')"></a>
           </div>
         </div>
       </div>
@@ -99,88 +106,91 @@
 </template>
 <script>
 import { setStore, getStore, removeStore } from '../../utils/storage.js'
-import {pwdLogin, email,captchaLogin} from './../../api/index';
+import { pwdLogin, email, captchaLogin } from './../../api/index'
 export default {
-  data () {
+  data() {
     return {
-      text:'发送验证码',
-      disable:false,
-      activeName:'first',
+      text: '发送验证码',
+      disable: false,
+      activeName: 'first',
       cart: [],
       ruleForm: {
         userName: '',
         password: '',
-        captcha:''
+        captcha: ''
       },
-      ruleForm2:{
+      ruleForm2: {
         userName: '',
-        captcha:''
+        captcha: ''
       },
       autoLogin: false,
       statusKey: ''
     }
   },
+  mounted() {
+    this.getRemembered()
+  },
   methods: {
-    open (t, m) {
+    open(t, m) {
       this.$notify.info({
         title: t,
         message: m
       })
     },
-    messageSuccess () {
+    messageSuccess() {
       this.$message({
         message: '恭喜您，注册成功！赶紧登录体验吧',
         type: 'success'
       })
     },
-    message (m) {
+    message(m) {
       this.$message.error({
         message: m
       })
     },
     // 发送验证码
-    sendCapture(){
-      if(!this.ruleForm2.userName){
+    sendCapture() {
+      if (!this.ruleForm2.userName) {
         this.message('请输入邮箱')
         return false
       }
       var reg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/
-      if(!reg.test(this.ruleForm2.userName)){
+      if (!reg.test(this.ruleForm2.userName)) {
         this.message('请输入正确邮箱')
         return false
       }
       this.disable = true
-      var countDown = 60;
-        // 设置定时器
-      let intervalId = setInterval(()=>{
-        this.text = countDown+"s后再次获得"
-        countDown --;
-        if(countDown === 0){
-          clearInterval(intervalId);
-          this.text = '发送验证码';
+      var countDown = 60
+      // 设置定时器
+      const intervalId = setInterval(() => {
+        this.text = countDown + 's后再次获得'
+        countDown--
+        if (countDown === 0) {
+          clearInterval(intervalId)
+          this.text = '发送验证码'
           this.disable = false
         }
-      }, 1000);
-      var params={
-        type:'capture',
-        userName:this.ruleForm2.userName
+      }, 1000)
+      var params = {
+        type: 'capture',
+        userName: this.ruleForm2.userName
       }
-      email(params).then(res=>{
+      email(params).then(res => {
       // 获取验证码失败
-        if(res.code!==200){
-          setTimeout(()=>{
-            clearInterval(intervalId);
-            countDown = 0;
-          }, 3000);
+        if (res.code !== 200) {
+          setTimeout(() => {
+            clearInterval(intervalId)
+            countDown = 0
+          }, 3000)
           this.message('获取验证码失败')
-        } 
-      })     
+        }
+      })
     },
     //  获取图形验证码
-    getCaptcha(){
-        this.$refs.captcha.src = 'http://192.168.43.16:3000/captcha?time=' + new Date();
+    getCaptcha() {
+      this.$refs.captcha.src = 'http://192.168.43.16:3000/captcha?time=' + new Date()
     },
-    getRemembered () {
+    getRemembered() {
       var judge = getStore('remember')
       if (judge === 'true') {
         this.autoLogin = true
@@ -188,7 +198,7 @@ export default {
         this.ruleForm.password = getStore('rpassword')
       }
     },
-    rememberPass () {
+    rememberPass() {
       if (this.autoLogin === true) {
         setStore('remember', 'true')
         setStore('rusername', this.ruleForm.userName)
@@ -199,18 +209,18 @@ export default {
         removeStore('rpassword')
       }
     },
-    toRegister () {
+    toRegister() {
       this.$router.push({
         path: '/register'
       })
     },
     // 登录返回按钮
-    login_back () {
+    login_back() {
       this.$router.go(-1)
     },
-    login () {
+    login() {
       // 密码登陆
-      if(this.activeName==='first'){
+      if (this.activeName === 'first') {
         this.rememberPass()
         if (!this.ruleForm.userName || !this.ruleForm.password) {
           this.message('账号或者密码不能为空!')
@@ -220,48 +230,42 @@ export default {
           this.message('请完成验证')
           return false
         }
-        pwdLogin(this.ruleForm).then(res =>{
-          if(res.code===200){
-           
-            this.$store.commit('RECORD_USERINFO', {info: res.data})
-            setStore("token", res.token);
-            setStore("userName",this.ruleForm.userName)
-            setStore('headphoto',res.data[0].headphoto)
-             this.$router.push({
-              path: '/'
-            })
-          } else{
-            this.message(res.msg)
-          }
-        });
-      }
-      // 验证码登陆
-      else{
-        if (!this.ruleForm2.userName ) {
-          this.message('账号不能为空!')
-          return false
-        }
-        if(!this.ruleForm2.captcha) {
-          this.message('请完成验证')
-          return false
-        }
-        captchaLogin(this.ruleForm2).then(res =>{
-          if(res.code===200){
-            setStore("token", res.token);
-            setStore("userName",this.ruleForm.userName)
+        pwdLogin(this.ruleForm).then(res => {
+          if (res.code === 200) {
+            this.$store.commit('RECORD_USERINFO', { info: res.data })
+            setStore('token', res.token)
+            setStore('userName', this.ruleForm.userName)
+            setStore('headphoto', res.data[0].headphoto)
             this.$router.push({
               path: '/'
             })
-          } else{
+          } else {
+            this.message(res.msg)
+          }
+        })
+      } else {
+        if (!this.ruleForm2.userName) {
+          this.message('账号不能为空!')
+          return false
+        }
+        if (!this.ruleForm2.captcha) {
+          this.message('请完成验证')
+          return false
+        }
+        captchaLogin(this.ruleForm2).then(res => {
+          if (res.code === 200) {
+            setStore('token', res.token)
+            setStore('userName', this.ruleForm.userName)
+            this.$router.push({
+              path: '/'
+            })
+          } else {
             this.message(res.msg)
           }
         })
       }
-    },
-  },
-  mounted () {
-    this.getRemembered()
-  },
+    }
+  }
 }
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
@@ -277,7 +281,7 @@ export default {
     /deep/ .el-input__inner{
       height: 50px;
     }
-    
+
   }
   .login-message{
     position :relative;
@@ -291,11 +295,11 @@ export default {
       right: 10px;
       transform :translateY(-50%);
       border: 0;
-      
+
       font-size :14px;
       background :transparent;
     }
-  }            
+  }
   .wrapper {
     background-size: 100px;
     min-height: 500px;
@@ -322,7 +326,7 @@ export default {
       color: #ebb563;
     }
     /deep/ .el-tabs__header {
-        
+
         margin: 15px -40px 25px;
     }
     /deep/ .el-tabs__nav{
@@ -371,7 +375,7 @@ export default {
     left: 50%;
     top: 50%;
   }
-  
+
   .common-form li {
     clear: both;
     margin-bottom: 15px;

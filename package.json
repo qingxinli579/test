@@ -5,7 +5,7 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "eslint src",
+    "lint": "eslint --fix --ext .js,.vue",
     "lint:create": "eslint --init"
   },
   "dependencies": {
@@ -29,6 +29,7 @@
   },
   "lint-staged": {
     "*.{js,vue}": [
+      "eslint --fix",
       "git add"
     ]
   },

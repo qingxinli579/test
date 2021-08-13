@@ -7,46 +7,50 @@
             <div>
               <img v-if="picture!='null'" :src="picture">
               <img v-else src="../../../static/images/logo.png" alt="">
-            </div> 
+            </div>
             <div class="box-inner">
               <ul class="account-nav">
-                <li v-for="(item,i) in nav" :key='i' :class="{current:item.name===title}"
-                    @click="tab(item)">
-                  <a href="javascript:;">{{item.name}}</a></li>
+                <li
+                  v-for="(item,i) in nav"
+                  :key="i"
+                  :class="{current:item.name===title}"
+                  @click="tab(item)"
+                >
+                  <a href="javascript:;">{{ item.name }}</a></li>
               </ul>
             </div>
           </div>
         </div>
         <div class="account-content">
-          <router-view></router-view>
+          <router-view />
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-  import {getStore} from '../../utils/storage'
-  export default {
-    data () {
-      return {
-        title: '我的订单',
-        nav: [
-          {name: '我的收藏', path: 'mycollect'},
-          {name: '账户资料', path: 'information'},
-          {name: '我的发布', path: 'mypublish'},
-        ],
-        editAvatar: true
-      }
-    },
-    methods: {
-      tab (e) {
-        this.$router.push({path: '/mine/' + e.path})
-      }
-    },
-    created () {
-      this.picture=getStore('headphoto')
-    },
+import { getStore } from '../../utils/storage'
+export default {
+  data() {
+    return {
+      title: '我的订单',
+      nav: [
+        { name: '我的收藏', path: 'mycollect' },
+        { name: '账户资料', path: 'information' },
+        { name: '我的发布', path: 'mypublish' }
+      ],
+      editAvatar: true
+    }
+  },
+  created() {
+    this.picture = getStore('headphoto')
+  },
+  methods: {
+    tab(e) {
+      this.$router.push({ path: '/mine/' + e.path })
+    }
   }
+}
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
   @import "../../assets/style/mixin";

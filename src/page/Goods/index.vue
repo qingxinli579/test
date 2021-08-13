@@ -8,10 +8,10 @@
               <el-col :span="2">
                 品牌：
               </el-col>
-              <el-col v-for="item in cart" :span="2" :key="item.brand_name">
+              <el-col v-for="item in cart" :key="item.brand_name" :span="2">
                 <div @click="insert(item.brand_name)">
                   <div style="float:left">
-                    <img class="bg-purple" :src="item.brand_logo" alt="" />
+                    <img class="bg-purple" :src="item.brand_logo" alt="">
                   </div>
                   <div>
                     {{ item.brand_name }}
@@ -21,12 +21,12 @@
               <el-col :span="2">
                 <div class="more" style="height:20px;">
                   <el-select
+                    v-model="brand"
                     clearable
                     class="all"
-                    v-model="brand"
-                    @change="_getAllGoods"
                     filterable
                     placeholder="查看更多"
+                    @change="_getAllGoods"
                   >
                     <el-option-group
                       v-for="group in brandOptions"
@@ -42,7 +42,7 @@
                           :value="item.value"
                         >
                           <div>
-                            <img :src="item.brand_logo" alt="" class="logo" />
+                            <img :src="item.brand_logo" alt="" class="logo">
                             {{ item.value }}
                           </div>
                         </el-option>
@@ -59,34 +59,31 @@
               href="javascript:;"
               :class="{ active: sortType === 1 }"
               @click="reset()"
-              >综合排序</a
-            >
+            >综合排序</a>
             <a
               href="javascript:;"
-              @click="sortByPrice(1)"
               :class="{ active: sortType === 2 }"
-              >价格从低到高</a
-            >
+              @click="sortByPrice(1)"
+            >价格从低到高</a>
             <a
               href="javascript:;"
-              @click="sortByPrice(-1)"
               :class="{ active: sortType === 3 }"
-              >价格从高到低</a
-            >
+              @click="sortByPrice(-1)"
+            >价格从高到低</a>
             <div class="price-interval">
               <input
+                v-model="min"
                 type="number"
                 class="input"
                 placeholder="价格"
-                v-model="min"
-              />
+              >
               <span style="margin: 0 5px"> - </span>
-              <input type="number" placeholder="价格" v-model="max" />
+              <input v-model="max" type="number" placeholder="价格">
               <el-button
                 type="warning"
                 size="mini"
-                @click="reset"
                 style="margin-left: 10px;"
+                @click="reset"
               >
                 确定
               </el-button>
@@ -96,10 +93,10 @@
             <div>其他：</div>
             <div class="selcolor">
               <el-select
-                clearable
                 v-model="ruleForm.color"
-                @change="_getAllGoods"
+                clearable
                 placeholder="颜色"
+                @change="_getAllGoods"
               >
                 <el-option
                   v-for="item in color"
@@ -115,26 +112,25 @@
             </div>
             <div class="selmile">
               <el-select
-                clearable
                 v-model="ruleForm.mile"
-                @change="_getAllGoods"
+                clearable
                 placeholder="行驶里程"
+                @change="_getAllGoods"
               >
                 <el-option
                   v-for="item in mile"
                   :key="item.value"
                   :label="item.lable"
                   :value="item.value"
-                >
-                </el-option>
+                />
               </el-select>
             </div>
             <div class="selyear">
               <el-select
-                clearable
                 v-model="ruleForm.year"
-                @change="_getAllGoods"
+                clearable
                 placeholder="上牌时间"
+                @change="_getAllGoods"
               >
                 <el-option
                   v-for="item in year"
@@ -157,32 +153,31 @@
       element-loading-text="加载中..."
       style="min-height: 35vw;"
     >
-      <div class="img-item" v-if="!noResult">
+      <div v-if="!noResult" class="img-item">
         <!--商品-->
         <div class="goods-box w">
           <mall-goods
             v-for="(item, i) in goods"
             :key="i"
             :goods="item"
-          ></mall-goods>
+          />
         </div>
         <el-pagination
           v-if="!noResult && !error"
           background
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
           :current-page="currentPage"
           :page-sizes="[4, 12, 40, 80]"
           :page-size="pageSize"
           layout="total, sizes, prev, pager, next, jumper"
           :total="total"
-        >
-        </el-pagination>
+          @size-change="handleSizeChange"
+          @current-change="handleCurrentChange"
+        />
       </div>
-      <div class="no-info" v-if="noResult">
+      <div v-if="noResult" class="no-info">
         <div class="no-data">
-          <img src="../../../static/images/no-search.png" />
-          <br />
+          <img src="../../../static/images/no-search.png">
+          <br>
           抱歉！暂时还没有商品
         </div>
         <!-- <section class="section">
@@ -193,10 +188,10 @@
           </y-shelf>
         </section> -->
       </div>
-      <div class="no-info" v-if="error">
+      <div v-if="error" class="no-info">
         <div class="no-data">
-          <img src="../../../static/images/error.png" />
-          <br />
+          <img src="../../../static/images/error.png">
+          <br>
           抱歉！出错了...
         </div>
       </div>
@@ -204,59 +199,62 @@
   </div>
 </template>
 <script>
-import goods from "../../serve/goods.json";
-import { getGoodsinfo } from "../../api/index";
-import mallGoods from "../../components/MallGoods";
-import { cartjson } from "../../serve/cart";
-import cartjsons from "../../serve/firstCart.json";
+import goods from '../../serve/goods.json'
+import { getGoodsinfo } from '../../api/index'
+import mallGoods from '../../components/MallGoods'
+import { cartjson } from '../../serve/cart'
+import cartjsons from '../../serve/firstCart.json'
 export default {
+  components: {
+    mallGoods
+  },
   data() {
     return {
-      search: "",
+      search: '',
       mile: [
         {
-          lable: "1万公里以内",
-          value: "1"
+          lable: '1万公里以内',
+          value: '1'
         },
         {
-          lable: "3万公里以内",
-          value: "3"
+          lable: '3万公里以内',
+          value: '3'
         },
         {
-          lable: "6万公里以内",
-          value: "6"
+          lable: '6万公里以内',
+          value: '6'
         },
         {
-          lable: "10万公里以内",
-          value: "10"
+          lable: '10万公里以内',
+          value: '10'
         }
       ],
       year: [
         {
-          lable: "1年以内",
-          value: "1"
+          lable: '1年以内',
+          value: '1'
         },
         {
-          lable: "3年以内",
-          value: "3"
+          lable: '3年以内',
+          value: '3'
         },
         {
-          lable: "6年以内",
-          value: "6"
+          lable: '6年以内',
+          value: '6'
         },
         {
-          lable: "10年以内",
-          value: "10"
+          lable: '10年以内',
+          value: '10'
         },
         {
-          lable: "10年以上",
-          value: "11"
+          lable: '10年以上',
+          value: '11'
         }
       ],
       ruleForm: {
-        color: "",
-        mile: "",
-        year: ""
+        color: '',
+        mile: '',
+        year: ''
       },
       color: goods.color,
       brandOptions: [],
@@ -264,39 +262,59 @@ export default {
       goods: [],
       noResult: false,
       error: false,
-      min: "",
-      max: "",
+      min: '',
+      max: '',
       loading: true,
       timer: null,
       sortType: 1,
       windowHeight: null,
       windowWidth: null,
-      sort: "",
+      sort: '',
       currentPage: 1,
       total: 0,
       pageSize: 12,
       brand: this.$route.params.brand
-    };
+    }
+  },
+  watch: {
+    $route() {
+      if (this.search != this.$route.query.key) {
+        this.search = this.$route.query.key
+        this._getAllGoods()
+      }
+    }
+  },
+  created() {
+    var n = cartjson()
+    this.brandOptions = n
+    if (this.$route.query.key) {
+      this.search = this.$route.query.key
+    }
+    this._getAllGoods()
+  },
+  mounted() {
+    this.windowHeight = window.innerHeight
+    this.windowWidth = window.innerWidth
   },
   methods: {
     handleSizeChange(val) {
-      this.pageSize = val;
-      this._getAllGoods();
-      this.loading = true;
+      this.pageSize = val
+      this._getAllGoods()
+      this.loading = true
     },
     handleCurrentChange(val) {
-      this.currentPage = val;
-      this._getAllGoods();
-      this.loading = true;
+      this.currentPage = val
+      this._getAllGoods()
+      this.loading = true
     },
     _getAllGoods() {
-      if (this.min !== "") {
-        this.min = Math.floor(this.min);
+      if (this.min !== '') {
+        this.min = Math.floor(this.min)
       }
-      if (this.max !== "") {
-        this.max = Math.floor(this.max);
+      if (this.max !== '') {
+        this.max = Math.floor(this.max)
       }
-      let params = {
+      const params = {
         currentPage: this.currentPage,
         size: this.pageSize,
         sort: this.sort,
@@ -307,68 +325,45 @@ export default {
         mile: this.ruleForm.mile,
         year: this.ruleForm.year,
         search: this.search
-      };
+      }
 
       getGoodsinfo(params).then(res => {
         if (res.code === 200) {
-          this.total = res.total;
-          this.goods = res.data;
-          this.noResult = false;
+          this.total = res.total
+          this.goods = res.data
+          this.noResult = false
           if (this.total === 0) {
-            this.noResult = true;
+            this.noResult = true
           }
-          this.error = false;
+          this.error = false
         } else {
-          this.error = true;
+          this.error = true
         }
-        this.loading = false;
-      });
+        this.loading = false
+      })
     },
     // 默认排序
     reset() {
-      this.sortType = 1;
-      this.sort = "";
-      this.currentPage = 1;
-      this.loading = true;
-      this._getAllGoods();
+      this.sortType = 1
+      this.sort = ''
+      this.currentPage = 1
+      this.loading = true
+      this._getAllGoods()
     },
     // 价格排序
     sortByPrice(v) {
-      v === 1 ? (this.sortType = 2) : (this.sortType = 3);
-      this.sort = v;
-      this.currentPage = 1;
-      this.loading = true;
-      this._getAllGoods();
+      v === 1 ? (this.sortType = 2) : (this.sortType = 3)
+      this.sort = v
+      this.currentPage = 1
+      this.loading = true
+      this._getAllGoods()
     },
     insert(brand) {
-      this.brand = brand;
-      this._getAllGoods();
+      this.brand = brand
+      this._getAllGoods()
     }
-  },
-  watch: {
-    $route() {
-      if (this.search != this.$route.query.key) {
-        this.search = this.$route.query.key;
-        this._getAllGoods();
-      }
-    }
-  },
-  created() {
-    var n = cartjson();
-    this.brandOptions = n;
-    if (this.$route.query.key) {
-      this.search = this.$route.query.key;
-    }
-    this._getAllGoods();
-  },
-  mounted() {
-    this.windowHeight = window.innerHeight;
-    this.windowWidth = window.innerWidth;
-  },
-  components: {
-    mallGoods
   }
-};
+}
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
 @import "../../assets/style/mixin";

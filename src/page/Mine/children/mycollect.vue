@@ -4,79 +4,88 @@
       <div class="gray-box">
         <div class="title"><h2>收藏夹</h2></div>
         <!--内容-->
-        <div class="content" v-if="cartList.length">
+        <div v-if="cartList.length" class="content">
           <el-table
             ref="multipleTable"
             :data="cartList"
             tooltip-effect="dark"
             style="width:100%;"
-            @selection-change="handleSelectionChange">
+            @selection-change="handleSelectionChange"
+          >
             <el-table-column
-              type='selection'
+              type="selection"
               show-overflow-tooltip
-              width="55">
-            </el-table-column>
+              width="55"
+            />
             <el-table-column
               label="商品信息"
-              width="300">
+              width="300"
+            >
               <template slot-scope="scope">
                 <div class="items-thumb fl">
-                  <img :alt="scope.row.brand"
-                    :src="scope.row.goods_picture.split('#')[0]">
-                  <a @click="goodsDetails(scope.row.goods_id)" :title="scope.row.goods_picture" target="_blank"></a> 
+                  <img
+                    :alt="scope.row.brand"
+                    :src="scope.row.goods_picture.split('#')[0]"
+                  >
+                  <a :title="scope.row.goods_picture" target="_blank" @click="goodsDetails(scope.row.goods_id)" />
                 </div>
                 <div class="name hide-row fl">
                   <div class="name-table">
-                    <a @click="goodsDetails(scope.row.goods_id)" :title="scope.row.brand" target="_blank"
-                      v-text="scope.row.brand"></a>
+                    <a
+                      :title="scope.row.brand"
+                      target="_blank"
+                      @click="goodsDetails(scope.row.goods_id)"
+                      v-text="scope.row.brand"
+                    />
                   </div>
-                </div> 
+                </div>
               </template>
             </el-table-column>
             <el-table-column
               label="价格"
-              width="200">
+              width="200"
+            >
               <template slot-scope="scope">
-                <div class="price1">¥ {{scope.row.price}}万元</div>
+                <div class="price1">¥ {{ scope.row.price }}万元</div>
               </template>
             </el-table-column>
             <el-table-column
               label="操作"
-              align='left'
+              align="left"
             >
               <template slot-scope="scope">
                 <div class="operation">
-                  <a class="items-delete-btn" @click="cartdel(scope.row.goods_id)"></a>
+                  <a class="items-delete-btn" @click="cartdel(scope.row.goods_id)" />
                 </div>
               </template>
-            </el-table-column> 
+            </el-table-column>
           </el-table>
           <div class="cart-bottom-bg fix-bottom">
             <div class="fix-bottom-inner">
               <div class="cart-bar-operation">
                 <div>
-                  <el-button size='mini' type='warning'  @click="delChecked">删除选中的商品</el-button>
+                  <el-button size="mini" type="warning" @click="delChecked">删除选中的商品</el-button>
                 </div>
               </div>
               <div class="shipping">
                 <div class="shipping-box">
                   <div class="shipping-total shipping-num"><h4
-                    class="highlight">已选择 
-                    <i v-text="multipleSelection.length"></i> 
-                    件商品</h4>
-                    <h5>共计 <i v-text="totalNum"></i> 件商品</h5></div>
+                                                             class="highlight"
+                                                           >已选择
+                                                             <i v-text="multipleSelection.length" />
+                                                             件商品</h4>
+                    <h5>共计 <i v-text="totalNum" /> 件商品</h5></div>
                 </div>
               </div>
             </div>
-          </div> 
+          </div>
         </div>
         <div v-else style="padding:50px">
-          <div class="cart-e">
-          </div>
+          <div class="cart-e" />
           <p style="text-align: center;padding: 20px;color: #8d8d8d">你的收藏夹空空如也</p>
           <div style="text-align: center">
             <router-link to="/goods">
-              <el-button style="width: 150px;height: 40px;" type='warning'>现在去选购</el-button>
+              <el-button style="width: 150px;height: 40px;" type="warning">现在去选购</el-button>
             </router-link>
           </div>
         </div>
@@ -85,94 +94,94 @@
   </div>
 </template>
 <script>
-  import {delcollect,delcollects} from '../../../api/index'
-  import { mapMutations, mapState } from 'vuex'
-  import { getStore } from '../../../utils/storage'
-  export default {
-    data () {
-      return {
-        userName: 0,
-        submit: true,
-        multipleSelection: [],
-      }
+import { delcollect, delcollects } from '../../../api/index'
+import { mapMutations, mapState } from 'vuex'
+import { getStore } from '../../../utils/storage'
+export default {
+  data() {
+    return {
+      userName: 0,
+      submit: true,
+      multipleSelection: []
+    }
+  },
+  computed: {
+    ...mapState(
+      ['cartList']
+    ),
+    // 计算总数量
+    totalNum() {
+      var totalNum = this.cartList.length
+      return totalNum
+    }
+  },
+  methods: {
+    ...mapMutations([
+      'INIT_BUYCART', 'EDIT_CART'
+    ]),
+    message(m) {
+      this.$message.error({
+        message: m
+      })
     },
-    computed: {
-      ...mapState(
-        ['cartList']
-      ),
-      // 计算总数量
-      totalNum () {
-        var totalNum = this.cartList.length;
-        return totalNum
-      },
+    goodsDetails(id) {
+      window.open(window.location.origin + '#/goodDetail?goods_id=' + id)
     },
-    methods: {
-      ...mapMutations([
-        'INIT_BUYCART', 'EDIT_CART'
-      ]),
-      message (m) {
-        this.$message.error({
-          message: m
+    // 删除整条购物车
+    cartdel(goods_id) {
+      this.$confirm('确定要删除该收藏?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        var params = {
+          userName: this.userName,
+          goods_id
+        }
+        delcollect(params).then(() => {
+          this.EDIT_CART({ goods_id })
+          this.$message({
+            type: 'success',
+            message: '删除成功'
+          })
         })
-      },
-      goodsDetails (id) {
-        window.open(window.location.origin + '#/goodDetail?goods_id=' + id)
-      },
-      // 删除整条购物车
-      cartdel (goods_id) {
-        this.$confirm('确定要删除该收藏?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-          }).then(() => {
-          var params={
-            userName: this.userName,
-            goods_id
-          }
-          delcollect(params).then(() => {
-            this.EDIT_CART({goods_id})
+      })
+    },
+    handleSelectionChange(val) {
+      this.multipleSelection = val
+    },
+    delChecked() {
+      this.$confirm('确定要删除该收藏?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        var multipleSelection = this.multipleSelection
+        var params = {
+          userName: this.userName,
+          multipleSelection
+        }
+        delcollects(params).then(res => {
+          if (res.code == 200) {
+            for (var i = 0; i < multipleSelection.length; i++) {
+              this.EDIT_CART({ goods_id: multipleSelection[i].goods_id })
+            }
             this.$message({
-              type:'success',
-              message:'删除成功'
+              type: 'success',
+              message: '删除成功'
             })
-          })
-        })
-      },
-      handleSelectionChange(val) {
-        this.multipleSelection = val;
-      },
-      delChecked () {
-        this.$confirm('确定要删除该收藏?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-          }).then(() => {
-          var multipleSelection=this.multipleSelection
-          var params={
-            userName: this.userName,
-            multipleSelection
+          } else {
+            this.message('删除失败')
           }
-          delcollects(params).then(res => {
-            if (res.code==200) {
-              for(var i=0;i<multipleSelection.length;i++){
-              this.EDIT_CART({goods_id:multipleSelection[i].goods_id})
-            }
-              this.$message({
-                type:'success',
-                message:'删除成功'
-              })
-            } else{
-              this.message('删除失败')
-            }
-          })
         })
-      }
-    },
-    mounted () {
-      this.userName = getStore('userName')
-      this.INIT_BUYCART()
-    },
+      })
+    }
+  },
+  mounted() {
+    this.userName = getStore('userName')
+    this.INIT_BUYCART()
   }
+}
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
   .store-content {
@@ -218,7 +227,7 @@
         background: #eee;
         border-bottom: 1px solid #dbdbdb;
         border-bottom-color: rgba(0, 0, 0, .08);
-        
+
         span {
           width: 137px;
           float: right;
@@ -283,7 +292,7 @@
           font-size: 16px;
         }
       }
-      
+
       .attribute, .name p {
         color: #999;
         font-size: 12px;

@@ -1,285 +1,290 @@
 <template>
   <div class="header-box">
-      <header class="w">
-        <div class="w-box">
-          <div class="nav-logo">
-            <h1 @click="changePage(-1)">
-              <img style="width:60px;height:60px" src="../../static/images/logo.png" alt="">
-            </h1>
-          </div>
-            <el-menu
-              :default-active="activeIndex"
-              class="el-menu-demo"
-              mode="horizontal"
-              background-color="#ffff"
-              text-color="black"
-              active-text-color="orange"
-              >
-              <el-menu-item index="1" @click="()=>{this.$router.push({path:'/'})}">首页</el-menu-item>
-              <el-menu-item index="2" @click="()=>{this.$router.push({path:'/goods'})}">我要买车</el-menu-item>
-              <el-menu-item index="3" @click="()=>{this.$router.push({path:'/addgood'})}">我要卖车</el-menu-item>
-              <el-menu-item index="4" @click="()=>{this.$router.push({path:'/mine'})}">个人管理</el-menu-item>
-            </el-menu>
-          <div class="right-box">
-            <div class="nav-list">
-              <el-autocomplete
+    <header class="w">
+      <div class="w-box">
+        <div class="nav-logo">
+          <h1 @click="changePage(-1)">
+            <img style="width:60px;height:60px" src="../../static/images/logo.png" alt="">
+          </h1>
+        </div>
+        <el-menu
+          :default-active="activeIndex"
+          class="el-menu-demo"
+          mode="horizontal"
+          background-color="#ffff"
+          text-color="black"
+          active-text-color="orange"
+        >
+          <el-menu-item index="1" @click="()=>{$router.push({path:'/'})}">首页</el-menu-item>
+          <el-menu-item index="2" @click="()=>{$router.push({path:'/goods'})}">我要买车</el-menu-item>
+          <el-menu-item index="3" @click="()=>{$router.push({path:'/addgood'})}">我要卖车</el-menu-item>
+          <el-menu-item index="4" @click="()=>{$router.push({path:'/mine'})}">个人管理</el-menu-item>
+        </el-menu>
+        <div class="right-box">
+          <div class="nav-list">
+            <el-autocomplete
+              v-model="input"
               clearable
-                placeholder="请输入商品信息"
-                prefix-icon="el-icon-search"
-                v-model="input"
-                minlength=1
-                maxlength=100
-                :fetch-suggestions="querySearchAsync"
-                @select="handleSelect"
-                :on-icon-click="handleIconClick"
-                @keydown.enter.native="handleIconClick">
-              </el-autocomplete>
-            </div>
-            <div class="nav-aside" ref="aside" :class="{fixed:st}">
-              <div class="user pr">
-                <router-link :to="islogin?'/mine':'login'"><i class="el-icon-user-solid" style="color:orange;font-size:22px"></i></router-link>
-                <!--用户信息显示-->
-                <div class="nav-user-wrapper pa" v-if="islogin">
-                  <div class="nav-user-list">
-                    <ul>
-                      <!--头像-->
-                      <li class="nav-user-avatar">
-                        <div>
-                          <span class="avatar">
-                            <template v-if="picture">
-                              <img  :src="picture" alt="">
-                            </template>
-                          </span>
-                        </div>
-                      </li>
-                      <li> 
-                        <router-link to="/mine/mycollect">我的收藏</router-link>
-                      </li>
-                      <li>
-                        <router-link to="/mine/information">账号资料</router-link>
-                      </li>
-                      <li>
-                        <router-link to="/mine/mypublish">我的发布</router-link>
-                      </li>
-                      <li>
-                        <a href="javascript:;" @click="loginOut">退出</a>
-                      </li>
-                    </ul>
-                  </div>
+              placeholder="请输入商品信息"
+              prefix-icon="el-icon-search"
+              minlength="1"
+              maxlength="100"
+              :fetch-suggestions="querySearchAsync"
+              :on-icon-click="handleIconClick"
+              @select="handleSelect"
+              @keydown.enter.native="handleIconClick"
+            />
+          </div>
+          <div ref="aside" class="nav-aside" :class="{fixed:st}">
+            <div class="user pr">
+              <router-link :to="islogin?'/mine':'login'"><i class="el-icon-user-solid" style="color:orange;font-size:22px" /></router-link>
+              <!--用户信息显示-->
+              <div v-if="islogin" class="nav-user-wrapper pa">
+                <div class="nav-user-list">
+                  <ul>
+                    <!--头像-->
+                    <li class="nav-user-avatar">
+                      <div>
+                        <span class="avatar">
+                          <template v-if="picture">
+                            <img :src="picture" alt="">
+                          </template>
+                        </span>
+                      </div>
+                    </li>
+                    <li>
+                      <router-link to="/mine/mycollect">我的收藏</router-link>
+                    </li>
+                    <li>
+                      <router-link to="/mine/information">账号资料</router-link>
+                    </li>
+                    <li>
+                      <router-link to="/mine/mypublish">我的发布</router-link>
+                    </li>
+                    <li>
+                      <a href="javascript:;" @click="loginOut">退出</a>
+                    </li>
+                  </ul>
                 </div>
               </div>
-              <div class="shop pr" @mouseover="cartShowState(true)" @mouseout="cartShowState(false)"
-                   ref="positionMsg">
-                <router-link to="/cart">
-                  <i class="el-icon-star-on" style="color:orange;font-size:24px;position:relative;top:-9px"></i>
-                </router-link>
-                <!--收藏夹显示块-->
-                <div class="nav-user-wrapper pa active" v-show="showCart">
-                  <div class="nav-user-list">
-                    <div class="full" v-show="totalNum">
-                      <div class="nav-cart-items">
-                        <ul>
-                          <li class="clearfix" v-for="(item,i) in cartList" :key="i">
-                            <div class="cart-item">
-                              <div class="cart-item-inner">
-                                <a @click="openProduct(item.goods_id)">
-                                  <div class="item-thumb">
-                                    
-                                    <img :src="item.goods_picture.split('#')[0]">
-                                  </div>
-                                  <div class="item-desc">
-                                    <div class="cart-cell"><h4>
-                                      <a href="" v-text="item.brand"></a>
-                                    </h4>
-                                  
-                                      <h6><span class="price-icon">¥</span><span
-                                        class="price-num">{{item.price}}</span>
-                                      </h6></div>
-                                  </div>
-                                  
-                                </a>
-                                <div class="del" @click="delGoods(item.goods_id)">
-                                  <i class="el-icon-close icon"></i>
+            </div>
+            <div
+              ref="positionMsg"
+              class="shop pr"
+              @mouseover="cartShowState(true)"
+              @mouseout="cartShowState(false)"
+            >
+              <router-link to="/cart">
+                <i class="el-icon-star-on" style="color:orange;font-size:24px;position:relative;top:-9px" />
+              </router-link>
+              <!--收藏夹显示块-->
+              <div v-show="showCart" class="nav-user-wrapper pa active">
+                <div class="nav-user-list">
+                  <div v-show="totalNum" class="full">
+                    <div class="nav-cart-items">
+                      <ul>
+                        <li v-for="(item,i) in cartList" :key="i" class="clearfix">
+                          <div class="cart-item">
+                            <div class="cart-item-inner">
+                              <a @click="openProduct(item.goods_id)">
+                                <div class="item-thumb">
+
+                                  <img :src="item.goods_picture.split('#')[0]">
                                 </div>
+                                <div class="item-desc">
+                                  <div class="cart-cell"><h4>
+                                                           <a href="" v-text="item.brand" />
+                                                         </h4>
+
+                                    <h6><span class="price-icon">¥</span><span
+                                      class="price-num"
+                                    >{{ item.price }}</span>
+                                    </h6></div>
+                                </div>
+
+                              </a>
+                              <div class="del" @click="delGoods(item.goods_id)">
+                                <i class="el-icon-close icon" />
                               </div>
                             </div>
-                          </li>
-                        </ul>
-                      </div>
-                    
-                      <div class="nav-cart-total"><p>共 <strong>{{totalNum}}</strong> 件商品</p> 
-                        <h6>
-                          <el-button
-                          
-                            style="height: 40px;width: 100%;margin: 0;font-size: 14px;"
-                            @click="toCart">去收藏夹</el-button>
-                        </h6>
-                      </div>
+                          </div>
+                        </li>
+                      </ul>
                     </div>
-                    <div v-show="!totalNum" style="height: 200px;text-align: center" class="cart-con">
-                      <p>您的收藏夹竟然是空的!</p>
+
+                    <div class="nav-cart-total"><p>共 <strong>{{ totalNum }}</strong> 件商品</p>
+                      <h6>
+                        <el-button
+
+                          style="height: 40px;width: 100%;margin: 0;font-size: 14px;"
+                          @click="toCart"
+                        >去收藏夹</el-button>
+                      </h6>
                     </div>
                   </div>
+                  <div v-show="!totalNum" style="height: 200px;text-align: center" class="cart-con">
+                    <p>您的收藏夹竟然是空的!</p>
+                  </div>
                 </div>
-                
               </div>
+
             </div>
           </div>
         </div>
-      </header>
+      </div>
+    </header>
   </div>
 </template>
 <script>
-  import { mapMutations,mapState } from 'vuex'
-  import {  removeStore, getStore ,setStore} from '../utils/storage'
-  import {getcollect,delcollect} from '../api/index'
-  export default{
-    data () {
-      return {
-        restaurants: [],
-        activeIndex:'1',
-        picture:'',
-        user: {},
-        // 查询数据库的商品
-        st: false,
-        // 头部收藏夹显示
-        cartShow: false,
-        positionL: 0,
-        positionT: 0,
-        timerCartShow: null, // 定时隐藏收藏夹
-        input: '',
-        choosePage: -1,
-        searchResults: [],
-        timeout: null,
-        token: '',
-        navList: [],
-        islogin:false,
-        // cartList:''
+import { mapMutations, mapState } from 'vuex'
+import { removeStore, getStore, setStore } from '../utils/storage'
+import { getcollect, delcollect } from '../api/index'
+export default {
+  data() {
+    return {
+      restaurants: [],
+      activeIndex: '1',
+      picture: '',
+      user: {},
+      // 查询数据库的商品
+      st: false,
+      // 头部收藏夹显示
+      cartShow: false,
+      positionL: 0,
+      positionT: 0,
+      timerCartShow: null, // 定时隐藏收藏夹
+      input: '',
+      choosePage: -1,
+      searchResults: [],
+      timeout: null,
+      token: '',
+      navList: [],
+      islogin: false
+      // cartList:''
+    }
+  },
+  computed: {
+    // ...mapState([
+    //   'cartList', 'login', 'receiveInCart', 'showCart', 'userInfo'
+    // ]),
+    ...mapState([
+      'cartList', 'showCart'
+    ]),
+    // 计算数量
+    totalNum() {
+      var totalNum = this.cartList.length
+      return totalNum
+    }
+  },
+  methods: {
+    ...mapMutations(['ADD_CART', 'INIT_BUYCART', 'ADD_ANIMATION', 'SHOW_CART', 'REDUCE_CART', 'RECORD_USERINFO', 'EDIT_CART']),
+    handleIconClick() {
+      this.$router.push({
+        path: '/goods',
+        query: {
+          key: this.input
+        }
+      })
+    },
+    //   // 搜索框提示
+    loadAll() {
+      return [
+        { 'value': '邯郸市奥迪' },
+        { 'value': '2016宝马' },
+        { 'value': '2015奔驰' },
+        { 'value': '山东省' },
+        { 'value': '北京市比亚迪' },
+        { 'value': '2014大众' }
+      ]
+    },
+    createFilter(queryString) {
+      return (restaurant) => {
+        return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0)
       }
     },
-    computed: {
-      // ...mapState([
-      //   'cartList', 'login', 'receiveInCart', 'showCart', 'userInfo'
-      // ]),
-      ...mapState([
-        'cartList','showCart'
-      ]),
-      // 计算数量
-      totalNum () {
-        var totalNum = this.cartList.length;
-        return totalNum
-      },
+    querySearchAsync(queryString, cb) {
+      var restaurants = this.restaurants
+      var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants
+      // 调用 callback 返回建议列表的数据
+
+      setTimeout(() => {
+        cb(results)
+      }, 300)
     },
-    methods: {
-      ...mapMutations(['ADD_CART', 'INIT_BUYCART', 'ADD_ANIMATION', 'SHOW_CART', 'REDUCE_CART', 'RECORD_USERINFO', 'EDIT_CART']),
-      handleIconClick () {
-        
-          this.$router.push({
-            path: '/goods',
-            query: {
-              key: this.input
-            }
-          })
-      },
-    //   // 搜索框提示
-      loadAll () {
-        return [
-          { "value": "邯郸市奥迪" },
-          { "value": "2016宝马"},
-          { "value": "2015奔驰" },
-          { "value": "山东省"},
-          { "value": "北京市比亚迪" },
-          { "value": "2014大众" },
-        ];
-      },
-      createFilter(queryString) {
-        return (restaurant) => {
-          return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
-        }},
-      querySearchAsync (queryString, cb) {
-        var restaurants = this.restaurants;
-        var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
-        // 调用 callback 返回建议列表的数据
-        
-          setTimeout(() => {
-            cb(results);
-          }, 300)
-        
-      },
-      handleSelect (item) {
-        this.input = item.value
-      },
-      // 收藏夹显示
-      cartShowState (state) {
-        this.SHOW_CART({showCart: state})
-      },
-      // 登陆时获取一次收藏夹商品
-      _getCartList () {
-        var params={userName: getStore('userName')}
-        getcollect(params).then(res => {
-          if (res.code === 200) {
-            setStore('buyCart', res.arr)
-          }
-          // 重新初始化一次本地数据
-        }).then(this.INIT_BUYCART)
-      },
+    handleSelect(item) {
+      this.input = item.value
+    },
+    // 收藏夹显示
+    cartShowState(state) {
+      this.SHOW_CART({ showCart: state })
+    },
+    // 登陆时获取一次收藏夹商品
+    _getCartList() {
+      var params = { userName: getStore('userName') }
+      getcollect(params).then(res => {
+        if (res.code === 200) {
+          setStore('buyCart', res.arr)
+        }
+        // 重新初始化一次本地数据
+      }).then(this.INIT_BUYCART)
+    },
     //   // 删除商品
-      delGoods (goods_id) {
-        this.$confirm('是否要删除该收藏?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-          }).then(() => {
-          delcollect({userName: getStore('userName'), goods_id}).then(() => {
-            this.EDIT_CART({goods_id})
-            this.$message({
-              type:'success',
-              message:'删除成功'
-            })
+    delGoods(goods_id) {
+      this.$confirm('是否要删除该收藏?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        delcollect({ userName: getStore('userName'), goods_id }).then(() => {
+          this.EDIT_CART({ goods_id })
+          this.$message({
+            type: 'success',
+            message: '删除成功'
           })
         })
-      },
-      toCart () {
-        this.$router.push({path: '/mine/mycollect'})
-      },
-      // 退出登陆
-      loginOut () {
-        removeStore('token')
-        removeStore('buyCart')
-        removeStore('userName')
-        window.location.href = '/'
-      },
-      // 通过路由改变导航文字样式
-      getPage () {
-        let path = this.$route.path
-        // let fullPath = this.$route.fullPath
-        if (path === '/' || path === '/home') {
-          this.activeIndex='1';
-        } else if (path === '/goods') {
-          this.activeIndex='2';} else if (path === '/addgood') {
-          this.activeIndex='3';
-        } else {
-          this.activeIndex='4';
-        }
-      },
-      openProduct (goods_id) {
-        window.open('//' + window.location.host + '/#/goodDetail?goods_id=' + goods_id)
-      },
+      })
     },
-    mounted () {
-      this.islogin=getStore('token')?true:false
-      if (this.islogin) {
-        this._getCartList()
+    toCart() {
+      this.$router.push({ path: '/mine/mycollect' })
+    },
+    // 退出登陆
+    loginOut() {
+      removeStore('token')
+      removeStore('buyCart')
+      removeStore('userName')
+      window.location.href = '/'
+    },
+    // 通过路由改变导航文字样式
+    getPage() {
+      const path = this.$route.path
+      // let fullPath = this.$route.fullPath
+      if (path === '/' || path === '/home') {
+        this.activeIndex = '1'
+      } else if (path === '/goods') {
+        this.activeIndex = '2'
+      } else if (path === '/addgood') {
+        this.activeIndex = '3'
       } else {
-        this.INIT_BUYCART()
-        
+        this.activeIndex = '4'
       }
-      var photo=getStore('headphoto');
-       this.picture=photo=='null'?'':photo
-      this.getPage()
-      this.restaurants = this.loadAll();
+    },
+    openProduct(goods_id) {
+      window.open('//' + window.location.host + '/#/goodDetail?goods_id=' + goods_id)
     }
+  },
+  mounted() {
+    this.islogin = !!getStore('token')
+    if (this.islogin) {
+      this._getCartList()
+    } else {
+      this.INIT_BUYCART()
+    }
+    var photo = getStore('headphoto')
+    this.picture = photo == 'null' ? '' : photo
+    this.getPage()
+    this.restaurants = this.loadAll()
   }
+}
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
   @import "../assets/style/theme";
@@ -409,7 +414,7 @@
       margin-right: 22px;
       .el-autocomplete{
         width: 305px;
-        
+
       }
       /deep/ .el-input__inner{
         // border:1px solid orange;
@@ -581,7 +586,7 @@
         a:before {
           content: " ";
           background-position: 0 -22px;
-  
+
         }
       }
       .nav-user-wrapper.active {
@@ -905,7 +910,7 @@
         transition: opacity .3s ease-in;
       }
     }
-    
+
     .nav-list2 {
       height: 28px;
       line-height: 28px;

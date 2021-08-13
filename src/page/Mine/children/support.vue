@@ -12,12 +12,12 @@
   </div>
 </template>
 <script>
-  import YShelf from '/components/shelf'
-  export default {
-    components: {
-      YShelf
-    }
+import YShelf from '/components/shelf'
+export default {
+  components: {
+    YShelf
   }
+}
 </script>
 <style lang="scss" scoped>
   .support {

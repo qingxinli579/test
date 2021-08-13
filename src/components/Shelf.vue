@@ -1,19 +1,19 @@
 <template>
   <div class="gray-box">
     <div class="title">
-        <h2>{{title}}</h2>
+      <h2>{{ title }}</h2>
     </div>
     <div>
-        <!-- 具名插槽 -->
-        <slot name='content'></slot>
+      <!-- 具名插槽 -->
+      <slot name="content" />
     </div>
   </div>
 </template>
 
 <script>
 export default {
-    props:['title']
-};
+  props: ['title']
+}
 </script>
 
 <style lang="scss" scoped>

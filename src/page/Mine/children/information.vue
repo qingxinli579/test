@@ -6,26 +6,26 @@
           <div>
             <el-form ref="form" :model="form" label-width="80px">
               <el-form-item label="邮箱">
-                <el-input disabled v-model="userName"></el-input>
+                <el-input v-model="userName" disabled />
               </el-form-item>
               <el-form-item label="昵称">
-                <el-input v-model="form.name"></el-input>
+                <el-input v-model="form.name" />
               </el-form-item>
               <el-form-item label="手机号">
-                <el-input v-model="form.phone"></el-input>
+                <el-input v-model="form.phone" />
               </el-form-item>
             </el-form>
             <el-button class="btn-edit" type="warning" @click="submit">修改</el-button>
           </div>
           <div class="avatar-box">
             <div class="img-box" style="position:relative" @click="editAvatar()">
-              <el-avatar  v-if="!picture" icon="el-icon-user-solid"></el-avatar>
-              <el-avatar v-else :src="picture"></el-avatar>
+              <el-avatar v-if="!picture" icon="el-icon-user-solid" />
+              <el-avatar v-else :src="picture" />
               <div style="position:absolute;bottom:45px;right:35px;font-size:30px">
-                <i class="el-icon-plus"></i>
+                <i class="el-icon-plus" />
               </div>
             </div>
-            <el-link class="edit-text" @click='editpsw' type="warning">修改密码</el-link>
+            <el-link class="edit-text" type="warning" @click="editpsw">修改密码</el-link>
           </div>
         </div>
         <!-- 弹框 -->
@@ -33,16 +33,17 @@
           title="修改密码"
           :visible.sync="dialogVisible"
           width="40%"
-          :before-close="handleClose">
-          <el-form :rules="rules" ref="password" :model="password" label-width="80px">
-            <el-form-item label="旧密码" prop='oldpsd'>
-              <el-input type="password" v-model="password.oldpsd"></el-input>
+          :before-close="handleClose"
+        >
+          <el-form ref="password" :rules="rules" :model="password" label-width="80px">
+            <el-form-item label="旧密码" prop="oldpsd">
+              <el-input v-model="password.oldpsd" type="password" />
             </el-form-item>
-            <el-form-item label="新密码" prop='newpsd1'>
-              <el-input type="password" v-model="password.newpsd1"></el-input>
+            <el-form-item label="新密码" prop="newpsd1">
+              <el-input v-model="password.newpsd1" type="password" />
             </el-form-item>
-            <el-form-item label="再次输入" prop='newpswd2'>
-              <el-input type="password" v-model="password.newpswd2"></el-input>
+            <el-form-item label="再次输入" prop="newpswd2">
+              <el-input v-model="password.newpswd2" type="password" />
             </el-form-item>
           </el-form>
           <span slot="footer" class="dialog-footer">
@@ -50,16 +51,19 @@
             <el-button type="primary" @click="subpsw('password')">确 定</el-button>
           </span>
         </el-dialog>
-        <div class="edit-avatar" v-if="editAvatarShow">
+        <div v-if="editAvatarShow" class="edit-avatar">
           <y-shelf title="设置头像">
             <div slot="content" class="content">
               <div class="edit-l">
                 <div style="width: 100px;height: 100px;border: 1px solid #ccc;margin-bottom: 20px;overflow: hidden;">
-                  <div class="show-preview"
-                       :style="{'width': previews.w + 'px','height': previews.h + 'px','overflow': 'hidden','zoom':option.zoom}">
+                  <div
+                    class="show-preview"
+                    :style="{'width': previews.w + 'px','height': previews.h + 'px','overflow': 'hidden','zoom':option.zoom}"
+                  >
                     <div :style="previews.div">
-                      <img :src="option.img"
-                           :style="previews.img"
+                      <img
+                        :src="option.img"
+                        :style="previews.img"
                       >
                     </div>
                   </div>
@@ -71,30 +75,34 @@
               </div>
               <div class="edit-r">
                 <div>
-                  <div class="big" id="cropper-target" v-if="option.img">
+                  <div v-if="option.img" id="cropper-target" class="big">
                     <vueCropper
-                      :img="option.img"
-                      @realTime="realTime"
                       ref="cropper"
-                      :outputSize="example2.size"
+                      :img="option.img"
+                      :output-size="example2.size"
                       :info="example2.info"
-                      :canScale="example2.canScale"
-                      :autoCrop="example2.autoCrop"
-                      :autoCropWidth="example2.width"
-                      :autoCropHeight="example2.height"
+                      :can-scale="example2.canScale"
+                      :auto-crop="example2.autoCrop"
+                      :auto-crop-width="example2.width"
+                      :auto-crop-height="example2.height"
                       :fixed="example2.fixed"
-                    ></vueCropper>
+                      @realTime="realTime"
+                    />
                   </div>
                 </div>
               </div>
               <div class="bootom-btn pa">
-                <el-button style="width: 140px;height: 40px;"
-                  @click="editAvatarShow=false">
+                <el-button
+                  style="width: 140px;height: 40px;"
+                  @click="editAvatarShow=false"
+                >
                   取消
                 </el-button>
-                <el-button style="width: 140px;height: 40px;"
+                <el-button
+                  style="width: 140px;height: 40px;"
                   type="warning"
-                  @click="cropper">
+                  @click="cropper"
+                >
                   确定
                 </el-button>
               </div>
@@ -106,211 +114,208 @@
   </div>
 </template>
 <script>
-  import { edituser,getuser,modifyPsd } from '../../../api/index'
-  import YShelf from '../../../components/Shelf'
-  import vueCropper from 'vue-cropper'
-  import {  mapMutations,mapState } from 'vuex'
-  import { getStore ,setStore} from '../../../utils/storage'
-  export default {
-    data () {
-      var validatePass2 = (rule, value, callback) => {
-        if (value !== this.password.newpsd1) {
-          callback(new Error('两次输入密码不一致!'));
-        } else {
-          callback();
-        }
-      };
-      return {
-        rules: {
-          oldpsd: [
-            { required: true, message: '请输入旧密码', trigger: 'blur' },
-          ],
-          newpsd1: [
-            { required: true, message: '请输入新密码', trigger: 'blur' },
-          ],
-          newpswd2: [
-            { required: true, message: '请再次输入新密码', trigger: 'blur' },
-             { validator: validatePass2, trigger: 'blur' }
-          ]
-        },
-        password:{
-          oldpsd:'',
-          newpsd1:'',
-          newpswd2:''
-        },
-        dialogVisible:false,
-        info:'',
-        picture:'',
-        fileName:'',
-        form:{
-          phone:'',
-          name:''
-        },
-        imgSrc: '',
-        editAvatarShow: false,
-        cropContext: '',
-        cropperImg: '',
-        previews: {},
-        option: {
-          img: '',
-          zoom: 0
-        },
-        fixedNumber: [1, 1],
-        example2: {
-          info: true,
-          size: 1,
-          canScale: false,
-          autoCrop: true,
-          // 只有自动截图开启 宽度高度才生效
-          autoCropWidth: 300,
-          autoCropHeight: 250,
-          // 开启宽度和高度比例
-          fixed: true
-        },
-        userName: '',
-        token: ''
+import { edituser, getuser, modifyPsd } from '../../../api/index'
+import YShelf from '../../../components/Shelf'
+import vueCropper from 'vue-cropper'
+import { mapMutations, mapState } from 'vuex'
+import { getStore, setStore } from '../../../utils/storage'
+export default {
+  components: {
+    YShelf,
+    vueCropper
+  },
+  data() {
+    var validatePass2 = (rule, value, callback) => {
+      if (value !== this.password.newpsd1) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
+    return {
+      rules: {
+        oldpsd: [
+          { required: true, message: '请输入旧密码', trigger: 'blur' }
+        ],
+        newpsd1: [
+          { required: true, message: '请输入新密码', trigger: 'blur' }
+        ],
+        newpswd2: [
+          { required: true, message: '请再次输入新密码', trigger: 'blur' },
+          { validator: validatePass2, trigger: 'blur' }
+        ]
+      },
+      password: {
+        oldpsd: '',
+        newpsd1: '',
+        newpswd2: ''
+      },
+      dialogVisible: false,
+      info: '',
+      picture: '',
+      fileName: '',
+      form: {
+        phone: '',
+        name: ''
+      },
+      imgSrc: '',
+      editAvatarShow: false,
+      cropContext: '',
+      cropperImg: '',
+      previews: {},
+      option: {
+        img: '',
+        zoom: 0
+      },
+      fixedNumber: [1, 1],
+      example2: {
+        info: true,
+        size: 1,
+        canScale: false,
+        autoCrop: true,
+        // 只有自动截图开启 宽度高度才生效
+        autoCropWidth: 300,
+        autoCropHeight: 250,
+        // 开启宽度和高度比例
+        fixed: true
+      },
+      userName: '',
+      token: ''
+    }
+  },
+  computed: {
+    ...mapState(['userInfo'])
+  },
+  created() {
+    this.userName = getStore('userName')
+    this.picture = getStore('headphoto')
+    var params = {
+      userName: this.userName
+    }
+    getuser(params).then(res => {
+      if (res.code == 200) {
+        this.info = res.data[0]
+        this.form.phone = res.data[0].phone
+        this.form.name = res.data[0].name
+      }
+    })
+  },
+  methods: {
+    ...mapMutations([
+      'RECORD_USERINFO'
+    ]),
+    message(m) {
+      this.$message(m)
+    },
+    messageSuccess(m) {
+      this.$message({
+        message: m,
+        type: 'success'
+      })
+    },
+    messageFail(m) {
+      this.$message.error({
+        message: m
+      })
+    },
+    upimg(e) {
+      var file = e.target.files[0]
+      this.fileName = file.name
+      if (file.size > 1048576) {
+        this.messageFail('图片大小不得超过1Mb')
+        return false
+      }
+      if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG)$/.test(e.target.value)) {
+        this.messageFail('图片类型仅支持.gif,jpeg,jpg,png,bmp')
+        return false
+      }
+      var reader = new FileReader()
+      reader.readAsDataURL(file)
+      reader.onload = (e) => {
+        this.option.img = e.target.result
       }
     },
-    computed: {
-      ...mapState(['userInfo'])
-    },
-    methods: {
-      ...mapMutations([
-        'RECORD_USERINFO'
-      ]),
-      message (m) {
-        this.$message(m)
-      },
-      messageSuccess (m) {
-        this.$message({
-          message: m,
-          type: 'success'
-        })
-      },
-      messageFail (m) {
-        this.$message.error({
-          message: m
-        })
-      },
-      upimg (e) {
-        var file = e.target.files[0]
-        this.fileName=file.name;
-        if (file.size > 1048576) {
-          this.messageFail('图片大小不得超过1Mb')
-          return false
-        }
-        if (!/\.(gif|jpg|jpeg|png|bmp|GIF|JPG|PNG)$/.test(e.target.value)) {
-          this.messageFail('图片类型仅支持.gif,jpeg,jpg,png,bmp')
-          return false
-        }
-        var reader = new FileReader()
-        reader.readAsDataURL(file)
-        reader.onload = (e) => {
-          this.option.img = e.target.result
-        }
-      },
-      cropper () {
-        this.message('上传中...')
-        if (this.option.img) {
-          this.$refs.cropper.getCropBlob((data) => {
-            var params = new FormData();
-            params.append('file',data,this.fileName);
-            params.append('userName',this.userName);
-            console.log('12344',this.userName)
-            edituser(params).then(res=>{
-              if(res.code==200){
-                var info=this.info;
-                info.headphoto=res.headphoto
-                this.$store.commit('RECORD_USERINFO', {info: info})
-                this.editAvatarShow=false
-                setStore('headphoto',res.headphoto)
-                this.messageSuccess('上传成功')
-                location.reload()
-                
-              } else{
-                this.editAvatarShow=false
-                this.messageFail('上传失败')
-              }
-              
-            })
-           
+    cropper() {
+      this.message('上传中...')
+      if (this.option.img) {
+        this.$refs.cropper.getCropBlob((data) => {
+          var params = new FormData()
+          params.append('file', data, this.fileName)
+          params.append('userName', this.userName)
+          console.log('12344', this.userName)
+          edituser(params).then(res => {
+            if (res.code == 200) {
+              var info = this.info
+              info.headphoto = res.headphoto
+              this.$store.commit('RECORD_USERINFO', { info: info })
+              this.editAvatarShow = false
+              setStore('headphoto', res.headphoto)
+              this.messageSuccess('上传成功')
+              location.reload()
+            } else {
+              this.editAvatarShow = false
+              this.messageFail('上传失败')
+            }
           })
-        } else {
-          this.messageFail('上传失败')
-        }
-      },
-      editAvatar () {
-        this.editAvatarShow = true
-      },
-      realTime (data) {
-        this.previews = data
-        let w = 100 / data.w
-        this.option.zoom = w
-      },
-      submit(){
-        var params={
-          name:this.form.name,
-          phone:this.form.phone,
-          userName:this.userName
-        }
-        edituser(params).then(res=>{
-          if(res.code==200){
-            this.$message({
-              type:'success',
-              message:'修改成功'
-            })
-          }
         })
-      },
-      editpsw(){
-        this.dialogVisible=true;
-      },
-      subpsw(form){
-         this.$refs[form].validate((valid) => {
-          if (valid) {
-        var params={
-          oldpsd:this.password.oldpsd,
-          newpsd:this.password.newpsd1,
-          userName:this.userName
-        }
-        modifyPsd(params).then(res=>{
-          if(res.code==200){
-            this.dialogVisible=false;
-            this.$message({
-              type:'success',
-              message:'修改密码成功'
-            })
-            
-          } else{
-            this.$message({
-              type:'success',
-              message:res.msg
-            })
-          }
-        })
-          }
-         })
+      } else {
+        this.messageFail('上传失败')
       }
     },
-    created () {
-      this.userName = getStore('userName')
-      this.picture=getStore('headphoto')
-      var params={
-        userName:this.userName
+    editAvatar() {
+      this.editAvatarShow = true
+    },
+    realTime(data) {
+      this.previews = data
+      const w = 100 / data.w
+      this.option.zoom = w
+    },
+    submit() {
+      var params = {
+        name: this.form.name,
+        phone: this.form.phone,
+        userName: this.userName
       }
-      getuser(params).then(res=>{
-        if(res.code==200){
-          this.info=res.data[0];
-          this.form.phone=res.data[0].phone
-          this.form.name=res.data[0].name
+      edituser(params).then(res => {
+        if (res.code == 200) {
+          this.$message({
+            type: 'success',
+            message: '修改成功'
+          })
         }
       })
     },
-    components: {
-      YShelf,
-      vueCropper
+    editpsw() {
+      this.dialogVisible = true
+    },
+    subpsw(form) {
+      this.$refs[form].validate((valid) => {
+        if (valid) {
+          var params = {
+            oldpsd: this.password.oldpsd,
+            newpsd: this.password.newpsd1,
+            userName: this.userName
+          }
+          modifyPsd(params).then(res => {
+            if (res.code == 200) {
+              this.dialogVisible = false
+              this.$message({
+                type: 'success',
+                message: '修改密码成功'
+              })
+            } else {
+              this.$message({
+                type: 'success',
+                message: res.msg
+              })
+            }
+          })
+        }
+      })
     }
   }
+
+}
 </script>
 <style lang="scss" scoped>
   @import "../../../assets/style/mixin";
@@ -461,7 +466,7 @@
       width:400px;
     }
   }
-  
+
   .btn-edit{
     margin:0 0 40px 300px;
   }

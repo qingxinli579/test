@@ -1,12 +1,11 @@
 <template>
   <div class="login v2">
     <div style=" width:100%;height:100vh;position:relative">
-        <div style="width:100%;height:100vh;background:rgba(0,0,0,0.2);position:absolute;z-index:9999">
-        </div>
-        <video style="width:100%;height:100vh;object-fit: fill;position:absolute;top:0" autoplay loop>
-          <source src="../../../static/images/loginBack.mp4" type="video/mp4">
-        </video>
-      </div>
+      <div style="width:100%;height:100vh;background:rgba(0,0,0,0.2);position:absolute;z-index:9999" />
+      <video style="width:100%;height:100vh;object-fit: fill;position:absolute;top:0" autoplay loop>
+        <source src="../../../static/images/loginBack.mp4" type="video/mp4">
+      </video>
+    </div>
     <div class="wrapper">
       <div class="dialog dialog-shadow" style="display: block;">
         <div class="registered">
@@ -15,41 +14,46 @@
             <ul class="common-form">
               <li class="username border-1p">
                 <div style="margin-top: 30px;" class="input">
-                  <el-input type="text"
-                    v-model="registered.userName" placeholder="邮箱"
+                  <el-input
+                    v-model="registered.userName"
+                    type="text"
+                    placeholder="邮箱"
                     prefix-icon="el-icon-user"
-                  >
-                  </el-input>
+                  />
                 </div>
               </li>
               <li>
                 <div class="input">
-                  <el-input type="password"
-                    prefix-icon="el-icon-lock"
+                  <el-input
                     v-model="registered.userPwd"
-                    placeholder="密码"></el-input>
+                    type="password"
+                    prefix-icon="el-icon-lock"
+                    placeholder="密码"
+                  />
                 </div>
               </li>
               <li>
                 <div class="input">
-                  <el-input type="password"
-                    prefix-icon="el-icon-connection"
+                  <el-input
                     v-model="registered.userPwd2"
-                    placeholder="重复密码"></el-input>
+                    type="password"
+                    prefix-icon="el-icon-connection"
+                    placeholder="重复密码"
+                  />
                 </div>
               </li>
               <li>
                 <div class="input">
                   <section class="login-message">
-                  <el-input  v-model="registered.captcha" @keyup.enter="login" placeholder="验证码" prefix-icon="el-icon-circle-check"></el-input>
-                  <el-button type="text"  class="get-verification" @click="sendCapture" :disabled= disable>{{text}}</el-button>
+                    <el-input v-model="registered.captcha" placeholder="验证码" prefix-icon="el-icon-circle-check" @keyup.enter="login" />
+                    <el-button type="text" class="get-verification" :disabled="disable" @click="sendCapture">{{ text }}</el-button>
                   </section>
                 </div>
               </li>
             </ul>
-            <el-checkbox class="agree" v-model="agreement">
-              我已阅读并同意遵守 
-              <a @click="open('法律声明','此仅为个人练习开源模仿项目，仅供学习参考，承担不起任何法律问题')">法律声明</a> 和 
+            <el-checkbox v-model="agreement" class="agree">
+              我已阅读并同意遵守
+              <a @click="open('法律声明','此仅为个人练习开源模仿项目，仅供学习参考，承担不起任何法律问题')">法律声明</a> 和
               <a @click="open('隐私条款','本网站将不会严格遵守有关法律法规和本隐私政策所载明的内容收集、使用您的信息')">隐私条款</a>
             </el-checkbox>
             <div style="margin-bottom: 30px;">
@@ -58,16 +62,18 @@
                 style="margin: 0;width: 100%;height: 48px;font-size: 18px;line-height: 48px"
                 @click="regist"
               >
-              注册
+                注册
               </el-button>
             </div>
-            <div class="border" ></div>
+            <div class="border" />
             <ul class="common-form pr">
               <li style="text-align: center;line-height: 48px;margin:0  0;font-size: 12px;color: #999;">
                 <span>如果您已拥账号，则可在此</span>
-                <a href="javascript:;"
-                   style="margin: 0 5px"
-                   @click="toLogin">登陆</a>
+                <a
+                  href="javascript:;"
+                  style="margin: 0 5px"
+                  @click="toLogin"
+                >登陆</a>
               </li>
             </ul>
           </div>
@@ -150,8 +156,8 @@ export default {
             countDown = 0;
         }, 3000);
         this.message('获取验证码失败')
-        } 
-      })       
+        }
+      })
     },
     regist () {
       let userName = this.registered.userName
@@ -196,7 +202,7 @@ export default {
     /deep/ .el-button{
         padding:0 0;
     }
-    
+
     .input {
       height: 50px;
       align-items: center;
@@ -217,7 +223,7 @@ export default {
       right: 10px;
       transform :translateY(-50%);
       border: 0;
-      
+
       font-size :14px;
       background :transparent;}
     }

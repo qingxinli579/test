@@ -1,26 +1,26 @@
 <template>
-  <div class="home" id="up">
+  <div id="up" class="home">
     <div class="banner">
       <el-carousel indicator-position="outside" height="280px">
-          <el-carousel-item v-for="item in banner" :key="item">
-              <img style="width:100%;height:280px" :src=item.url alt="">
-          </el-carousel-item>
+        <el-carousel-item v-for="item in banner" :key="item">
+          <img style="width:100%;height:280px" :src="item.url" alt="">
+        </el-carousel-item>
       </el-carousel>
       <el-card class="box-card" style="z-index:9999999;">
         <el-col :span="14">
           <div class="grid-content">
             <div class="topic">我要买车 ▶</div>
             <el-row style="margin-left:20px">
-              <el-col 
-                v-for="item in cart" 
-                :span="3"
+              <el-col
+                v-for="item in cart"
                 :key="item.brand_name"
+                :span="3"
               >
                 <div @click="bybrand(item.brand_name)">
-                  <img class="bg-purple" :src=item.brand_logo alt="">
+                  <img class="bg-purple" :src="item.brand_logo" alt="">
                 </div>
                 <div>
-                  {{item.brand_name}}
+                  {{ item.brand_name }}
                 </div>
               </el-col>
             </el-row>
@@ -37,14 +37,13 @@
               <el-col :span="4">
                 <a href="#success">最近成交</a>
               </el-col>
+              <el-col :span="4" />
               <el-col :span="4">
-              </el-col>
-              <el-col :span="4" >
                 <router-link to="/goods">
-                  <a href=""  style="color:orange">
+                  <a href="" style="color:orange">
                     更多车辆>>
                   </a>
-                </router-link>    
+                </router-link>
               </el-col>
             </el-row>
           </div>
@@ -56,11 +55,11 @@
             </div>
             <div class="people">
               已有
-              <i style="color:orange;font-size:22px">{{count}}</i>
+              <i style="color:orange;font-size:22px">{{ count }}</i>
               人提交了卖车申请
             </div>
             <el-button-group>
-              <el-button @click="addgood" class="button" type="danger">填写信息</el-button>
+              <el-button class="button" type="danger" @click="addgood">填写信息</el-button>
               <a href="#process">
                 <el-button class="button" type="warning">
                   交易流程
@@ -69,7 +68,7 @@
             </el-button-group>
           </div>
         </el-col>
-      </el-card>   
+      </el-card>
     </div>
     <!-- <div class="amap-page-container" style="height:500px;">
       <el-amap vid="amap" :plugin="plugin" class="amap-demo" :center="center"> </el-amap>
@@ -87,254 +86,258 @@
             <div
               class="imgbanner"
             >
-            <img :src='todayimg' alt="">
+              <img :src="todayimg" alt="">
             </div>
-            <mall-goods :goods='o' v-for='(o,i) in today' :key='i'></mall-goods>
+            <mall-goods v-for="(o,i) in today" :key="i" :goods="o" />
           </div>
         </m-shelf>
       </section>
-      <section class="w mt30 clearfix" id='new'>
+      <section id="new" class="w mt30 clearfix">
         <m-shelf title="最新发布">
           <div slot="content" class="floors">
-            <last-goods :goods='o' v-for='(o,i) in topsix' :key='i'></last-goods>
+            <last-goods v-for="(o,i) in topsix" :key="i" :goods="o" />
           </div>
         </m-shelf>
       </section>
-      <section class="w mt30 clearfix" id='lows'>
-        <m-shelf title="练手车"  style="postion:reletive" >
+      <section id="lows" class="w mt30 clearfix">
+        <m-shelf title="练手车" style="postion:reletive">
           <div slot="content" class="floors">
-            <div 
+            <div
               style="float:right;overflow:hidden"
               class="imgbanner"
             >
-              <img  :src="proimg" alt="">
+              <img :src="proimg" alt="">
             </div>
-            <mall-goods  :goods='o' v-for='(o,i) in practise' :key='i'></mall-goods> 
+            <mall-goods v-for="(o,i) in practise" :key="i" :goods="o" />
           </div>
         </m-shelf>
       </section>
-      <section class="w mt30 clearfix" id='success'>
+      <section id="success" class="w mt30 clearfix">
         <m-shelf title="最近成交">
           <div slot="content" class="floors">
-            <last-success :goods='o' v-for='(o,i) in success ' :key='i'>
+            <last-success v-for="(o,i) in success " :key="i" :goods="o" />
 
-            </last-success>
-            
           </div>
         </m-shelf>
       </section>
       <section>
-        <div class="buy" id='process'>
+        <div id="process" class="buy">
           <div class="buy-topic">
-            <span @mouseover="changebuy" :style="{'border-bottom':isbuy ? '3px solid orange':'none'}"
-            class="buy-content">买车流程</span>
+            <span
+              :style="{'border-bottom':isbuy ? '3px solid orange':'none'}"
+              class="buy-content"
+              @mouseover="changebuy"
+            >买车流程</span>
             <span>|</span>
-            <span @mouseover="changesell" :style="{'border-bottom':!isbuy ? '3px solid orange':'none'}"
-            class="buy-content">卖车流程</span>
+            <span
+              :style="{'border-bottom':!isbuy ? '3px solid orange':'none'}"
+              class="buy-content"
+              @mouseover="changesell"
+            >卖车流程</span>
           </div>
           <div>
-            <process v-if="isbuy" :data="buyProcess"></process>
-            <process v-if="!isbuy" :data='sellProcess'></process>
+            <process v-if="isbuy" :data="buyProcess" />
+            <process v-if="!isbuy" :data="sellProcess" />
           </div>
         </div>
       </section>
-      <prompt @changef='changef($event)' :dialogVisible=dialogVisible></prompt>
-      <home-side></home-side>
+      <prompt :dialog-visible="dialogVisible" @changef="changef($event)" />
+      <home-side />
     </div>
-    
+
   </div>
 </template>
 <script>
-  import MShelf from "@/components/Shelf";
-  import homeSide from "@/components/homeSide";
-  import MallGoods from "@/components/MallGoods";
-  import lastGoods from '@/components/lastGoods';
-  import lastSuccess from '@/components/lastSuccess';
-  import cartjson from '../../serve/firstCart.json';
-  import {getCartinfo,getgoodcount,getimg,headgoods} from './../../api/index';
-  import Process from '../../components/process.vue';
-  import Prompt from '../../components/prompt'
-  // 主要逻辑
-  export default {
-    data() {
-      let self = this;
-      return {
-        topsix:'',
-        practise:'',
-        success:'',
-        today:'',
-        dialogVisible:false,
-        count:'正在加载',
-        isbuy:true,
-        buyProcess:[
-          {
-            lable:'预约看车>>>',
-            value:'预约看车',
-            value2:'与车主直接联系',
-            ico:'el-icon-phone-outline'
-          },
-          {
-            lable:'线下看车>>>',
-            value:'线下看车',
-            value2:'线下到达指定位置面对面看车',
-            img:'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2002182095,2757208147&fm=26&gp=0.jpg',
-            ico:'el-icon-view'
-          },
-          {
-            lable:'签署合同>>>',
-            value:'签署合同',
-            value2:'卖方、买方签署二手车买卖及居间服务合同',
-            img:'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2002182095,2757208147&fm=26&gp=0.jpg',
-            ico:'el-icon-edit'
-          },
-          {
-            lable:'交易过户',
-            value:'交易过户',
-            value2:'协助过户，支付车款，好车开回家',
-            ico:'el-icon-truck'
-          },
-          
-        ],
-        sellProcess:[
-          {
-            lable:'填写信息>>>',
-            value:'填写信息',
-            value2:'填写车辆信息',
-            ico:'el-icon-user'
-          },
-          {
-            lable:'审核通过>>>',
-            value:'审核通过',
-            value2:'管理员进行审核，待审核通过即可在平台发布',
-            img:'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2002182095,2757208147&fm=26&gp=0.jpg',
-            ico:'el-icon-circle-check'
-          },
-          {
-            lable:'用户看车>>>',
-            value:'用户看车',
-            value2:'快速匹配意向买家',
-            img:'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2002182095,2757208147&fm=26&gp=0.jpg',
-            ico:'el-icon-view'
-          },
-          {
-            lable:'签约过户',
-            value:'签约过户',
-            value2:'省时省心，支付车款',
-            ico:'el-icon-coin'
-          },
-        ],
-        banner:'',
-        todayimg:'',
-        proimg:'',
-        homeList: [],
-        gooddetail:'',
-        cart:cartjson.cart,
-        center: [121.59996, 31.197646],
-            lng: 0,
-            lat: 0,
-            loaded: false,
-            plugin: [{
-              pName: 'Geolocation',
-              events: {
-                init(o) {
-                    console.log(o,'000')
-                  // o 是高德地图定位插件实例
-                  o.getCurrentPosition((status, result) => {
-                      console.log(result,111)
-                    if (result && result.position) {
-                      // 如果key是企业的，还可以直接result.addressComponent获取省市，周边等信息
-                      self.lng = result.position.lng;
-                      self.lat = result.position.lat;
-                      console.log(result.position)
-                      self.center = [self.lng, self.lat];
-                      self.loaded = true;
-                      self.$nextTick()
-                    }
-                  })
-                }
+import MShelf from '@/components/Shelf'
+import homeSide from '@/components/homeSide'
+import MallGoods from '@/components/MallGoods'
+import lastGoods from '@/components/lastGoods'
+import lastSuccess from '@/components/lastSuccess'
+import cartjson from '../../serve/firstCart.json'
+import { getCartinfo, getgoodcount, getimg, headgoods } from './../../api/index'
+import Process from '../../components/process.vue'
+import Prompt from '../../components/prompt'
+// 主要逻辑
+export default {
+  components: {
+    MShelf,
+    MallGoods,
+    lastGoods,
+    lastSuccess,
+    Process,
+    Prompt,
+    homeSide
+  },
+  data() {
+    const self = this
+    return {
+      topsix: '',
+      practise: '',
+      success: '',
+      today: '',
+      dialogVisible: false,
+      count: '正在加载',
+      isbuy: true,
+      buyProcess: [
+        {
+          lable: '预约看车>>>',
+          value: '预约看车',
+          value2: '与车主直接联系',
+          ico: 'el-icon-phone-outline'
+        },
+        {
+          lable: '线下看车>>>',
+          value: '线下看车',
+          value2: '线下到达指定位置面对面看车',
+          img: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2002182095,2757208147&fm=26&gp=0.jpg',
+          ico: 'el-icon-view'
+        },
+        {
+          lable: '签署合同>>>',
+          value: '签署合同',
+          value2: '卖方、买方签署二手车买卖及居间服务合同',
+          img: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2002182095,2757208147&fm=26&gp=0.jpg',
+          ico: 'el-icon-edit'
+        },
+        {
+          lable: '交易过户',
+          value: '交易过户',
+          value2: '协助过户，支付车款，好车开回家',
+          ico: 'el-icon-truck'
+        }
+
+      ],
+      sellProcess: [
+        {
+          lable: '填写信息>>>',
+          value: '填写信息',
+          value2: '填写车辆信息',
+          ico: 'el-icon-user'
+        },
+        {
+          lable: '审核通过>>>',
+          value: '审核通过',
+          value2: '管理员进行审核，待审核通过即可在平台发布',
+          img: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2002182095,2757208147&fm=26&gp=0.jpg',
+          ico: 'el-icon-circle-check'
+        },
+        {
+          lable: '用户看车>>>',
+          value: '用户看车',
+          value2: '快速匹配意向买家',
+          img: 'https://ss2.bdstatic.com/70cFvnSh_Q1YnxGkpoWK1HF6hhy/it/u=2002182095,2757208147&fm=26&gp=0.jpg',
+          ico: 'el-icon-view'
+        },
+        {
+          lable: '签约过户',
+          value: '签约过户',
+          value2: '省时省心，支付车款',
+          ico: 'el-icon-coin'
+        }
+      ],
+      banner: '',
+      todayimg: '',
+      proimg: '',
+      homeList: [],
+      gooddetail: '',
+      cart: cartjson.cart,
+      center: [121.59996, 31.197646],
+      lng: 0,
+      lat: 0,
+      loaded: false,
+      plugin: [{
+        pName: 'Geolocation',
+        events: {
+          init(o) {
+            console.log(o, '000')
+            // o 是高德地图定位插件实例
+            o.getCurrentPosition((status, result) => {
+              console.log(result, 111)
+              if (result && result.position) {
+                // 如果key是企业的，还可以直接result.addressComponent获取省市，周边等信息
+                self.lng = result.position.lng
+                self.lat = result.position.lat
+                console.log(result.position)
+                self.center = [self.lng, self.lat]
+                self.loaded = true
+                self.$nextTick()
               }
-                        
-            }]
-      };
+            })
+          }
+        }
+
+      }]
+    }
+  },
+  mounted() {
+    if (window.performance.navigation.type == 1) {
+      this.dialogVisible = false
+      console.log('0')
+    } else {
+      this.dialogVisible = true
+      console.log('1')
+    }
+  },
+  destroyed() {
+    window.performance.navigation.type == 1
+    console.log('2')
+  },
+  created() {
+    getCartinfo().then(res => {
+      this.gooddetail = res
+    }),
+    getgoodcount().then(res => {
+      this.count = res.count
+    }),
+    getimg({ position: '首页轮播' }).then(res => {
+      this.banner = res.data
+      console.log(res.data)
+    })
+    getimg({ position: '今日推荐' }).then(res => {
+      this.todayimg = res.data[0].url
+    })
+    getimg({ position: '练手车' }).then(res => {
+      this.proimg = res.data[0].url
+    })
+    headgoods({ type: '1' }).then(res => {
+      this.topsix = res.data
+    })
+    headgoods({ type: '2' }).then(res => {
+      this.practise = res.data
+    })
+    headgoods({ type: '3' }).then(res => {
+      this.success = res.data
+    })
+    headgoods({ type: '0' }).then(res => {
+      this.today = res.data
+    })
+  },
+  methods: {
+    changef() {
+      this.dialogVisible = false
+      console.log(this.dialogVisible)
     },
-    components: {
-      MShelf,
-      MallGoods,
-      lastGoods,
-      lastSuccess,
-      Process,
-      Prompt,
-      homeSide
+    changebuy() {
+      this.isbuy = true
     },
-    methods:{
-      changef(){
-        this.dialogVisible=false
-        console.log(this.dialogVisible)
-      },
-      changebuy(){
-        this.isbuy=true
-      },
-      changesell(){
-        this.isbuy=false
-      },
-      addgood(){
-        this.$router.push({
-          path:'/addgood'
-        })
-      },
-      bybrand(name){
-        this.$router.push({
-            name:'goods',
-            params:{
-              brand:name
-            }
-        })
-      },
+    changesell() {
+      this.isbuy = false
     },
-    mounted(){
-      if (window.performance.navigation.type == 1) {
-        this.dialogVisible=false
-        console.log('0')
-      }else{
-        this.dialogVisible=true
-        console.log('1')
-      }
-    },
-    destroyed() {
-      window.performance.navigation.type == 1;
-      console.log('2')
-    },
-    created(){
-      getCartinfo().then(res=>{
-        this.gooddetail=res;
+    addgood() {
+      this.$router.push({
+        path: '/addgood'
       })
-      getgoodcount().then(res=>{
-        this.count=res.count
-      }),
-      getimg({position:'首页轮播'}).then(res=>{
-        this.banner=res.data
-        console.log(res.data)
-      }),
-      getimg({position:'今日推荐'}).then(res=>{
-        this.todayimg=res.data[0].url
-      }),
-      getimg({position:'练手车'}).then(res=>{
-        this.proimg=res.data[0].url
-      }),
-      headgoods({type:'1'}).then(res=>{
-        this.topsix=res.data
-      }),
-      headgoods({type:'2'}).then(res=>{
-        this.practise=res.data
-      }),
-      headgoods({type:'3'}).then(res=>{
-        this.success=res.data
-      }),
-      headgoods({type:'0'}).then(res=>{
-        this.today=res.data
+    },
+    bybrand(name) {
+      this.$router.push({
+        name: 'goods',
+        params: {
+          brand: name
+        }
       })
     }
-  };
+  }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -374,7 +377,7 @@
             color:orange
         }
     }
-    
+
     .bg-purple{
         width:30px;
         height:30px;
@@ -625,7 +628,7 @@
       width: 49%;
       height: 320px;
       margin:10px 0 10px 1% ;
-      
+
       .cover-link {
         cursor: pointer;
         display: block;
@@ -672,10 +675,9 @@
       padding: 5px 0;
       font-weight: 300;
       display: inline-block;
-    
+
     }
   }
 
 </style>
-
 
