@@ -1,5 +1,5 @@
 <template>
-  <div class="">
+  <div class="login v2">
     <div style=" width:100%;height:240px;position:relative">
       <div style="width:100%;height:100vh;background:rgba(0,0,0,0.2);position:absolute;z-index:9999" />
       <video style="width:100%;height:100vh;object-fit: fill;position:absolute;top:0" autoplay loop>
