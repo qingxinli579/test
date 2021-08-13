@@ -1,6 +1,6 @@
 import cart from './carticon.json'
 export function cartjson() {
-  var obj = {}
+  var obj= {}
   for (var m = 0; m < cart.result.length; m++) {
     if (!obj[cart.result[m].first_letter]) {
       obj[cart.result[m].first_letter] = []
