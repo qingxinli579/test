@@ -14,6 +14,7 @@ module.exports = {
   // add your custom rules here
   // it is base on https://github.com/vuejs/eslint-config-vue
   rules: {
+    'vue/no-parsing-error': [2, { 'x-invalid-end-tag': false }],
     'vue/require-default-prop': 0, // 不检查默认属性
     'vue/require-prop-types': 0, // 不检查默认类型
     'vue/max-attributes-per-line': [
@@ -30,7 +31,7 @@ module.exports = {
     'vue/multiline-html-element-content-newline': 'off',
     // 'vue/name-property-casing': ['error', 'PascalCase'],
     'vue/no-v-html': 'off',
-    'accessor-pairs': 2,
+    'accessor-pairs': 2, // 强制getset一起
     'arrow-spacing': [
       2,
       {
@@ -46,12 +47,12 @@ module.exports = {
         allowSingleLine: true
       }
     ],
-    // camelcase: [
-    //   0,
-    //   {
-    //     properties: 'always'
-    //   }
-    // ],
+    camelcase: [
+      0,
+      {
+        properties: 'always'
+      }
+    ],
     'comma-dangle': [2, 'never'],
     'comma-spacing': [
       2,

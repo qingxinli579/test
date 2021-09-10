@@ -3,6 +3,7 @@
     <y-shelf title="账户资料">
       <div slot="content">
         <div class="info-box">
+          <div class="11" />
           <div>
             <el-form ref="form" :model="form" label-width="80px">
               <el-form-item label="邮箱">
